@@ -1,8 +1,8 @@
-import nodeCron from 'node-cron'
+import { CronJob } from 'cron'
 import { Client } from "@notionhq/client";
 import { markdownToBlocks } from '@tryfabric/martian';
 import fetch from 'cross-fetch'
-import ICalParser from 'ical-js-parser';
+import ICalParser, { ICalJSON } from 'ical-js-parser';
 
 const notion = new Client({
 	auth: process.env.NOTION_KEY
@@ -14,7 +14,7 @@ const settingsId = process.env.NOTION_SETTINGS_ID
 const calendars: {
 	[key: string]: {
 		name: string,
-		url: string
+		json: ICalJSON
 	}
 } = {}
 
@@ -32,14 +32,7 @@ export async function sync() {
 	console.log("[sync] Synchronizing...")
 
 	for (let id in calendars) {
-		const { name, url } = calendars[id]
-
-		// Pull iCal from Google Calendar
-		const res = await fetch(url)
-		const ical = await res.text()
-
-		// Parse iCal
-		const json = ICalParser.toJSON(ical)
+		const { name, json } = calendars[id]
 
 		console.log('[sync] Calendar "%s"', name)
 		for (let [i, ev] of json.events.entries()) {
@@ -156,23 +149,39 @@ export async function setup() {
 			})
 		).url
 
-		calendars[result.id] = { name, url }
+		const res = await fetch(url)
+		const ical = await res.text()
+
+		// Parse iCal
+		const json = ICalParser.toJSON(ical)
+
+		calendars[result.id] = { name, json }
 	}
 
 	await sync()
 }
 
-// Run every 5 minutes
-export const job = nodeCron.schedule("0 5 * * * *", async () => {
-	const t = new Date().toISOString
+const tick = async () => {
+	const t = () => new Date(Date.now()).toISOString()
 
 	status.message = `[${t()}] Synchronizing`
-	console.log("\n[CRON][%s] Synchronizing Google Calendar and Notion...", t())
+	
+	console.log("\n[CRON][%s] Pulling latest calendar...", t())
 	await setup()
+	
+	console.log("\n[CRON][%s] Synchronizing Google Calendar and Notion...", t())
 	await sync()
+	
 	console.log("[CRON][%s] Finished.\n", t())
+	
 	status.message = `[${t()}] Synchronized`
-})
+}
+
+// Run every 5 minutes
+export const job = new CronJob(
+	"5 * * * *",
+	tick
+)
 
 // Status info to be displayed on server
 export const status = {
