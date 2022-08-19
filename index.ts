@@ -1,5 +1,5 @@
 import http from 'http'
-import { job, setup, status } from './databaseSync'
+import { job, setup, status } from './cync'
 
 // Needed for keep-alive functionality on free repl.
 const server = http.createServer((_, res) => {
