@@ -179,7 +179,7 @@ const tick = async () => {
 
 // Run every 5 minutes
 export const job = new CronJob(
-	"5 * * * *",
+	"*/5 * * * *",
 	tick
 )
 

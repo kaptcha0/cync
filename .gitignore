@@ -6,3 +6,4 @@ node_modules/
 replit.nix
 ## Basic server setup on replit so the integration does not stop running
 server.ts
+.breakpoints
