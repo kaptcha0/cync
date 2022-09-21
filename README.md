@@ -4,16 +4,16 @@
 Cync is a simple WIP that syncs iCal files pulled from the internet to a Notion database.
 A goal will be to add 2-way compatibility, but from the calendar to Notion is OK for now.
 
-## Notion Requirements
+## Requirements in Notion
 2 Databases with read/write access given to the integration:
 
-1. Calendar
+1. Calendar database with:
 	- Text field called `Event`
 	- Select field called `Calendar`
 	- Date field called `Date`
 	- Text field called `ID`
 	- URL field called `URL`
-2. Settings
+2. Settings database with:
 	- Text field called `Name`
 	- URL field called `URL`
 
@@ -24,7 +24,7 @@ A goal will be to add 2-way compatibility, but from the calendar to Notion is OK
 - `NOTION_SETTINGS_ID`
 	- Holds settings for the integration:
 		1. Name of the calendar
-	  2. URL of the iCal
+	  	2. URL of the iCal
 
 - `NOTION_KEY`
 	- Holds the Notion integration token
