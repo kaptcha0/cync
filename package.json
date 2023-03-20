@@ -13,7 +13,7 @@
     "@notionhq/client": "^2.2.3",
     "@tryfabric/martian": "^1.2.4",
     "@types/cron": "^2.0.0",
-    "cron": "^2.2.0",
+    "cron": "^2.3.0",
     "cross-fetch": "^3.1.5",
     "ical-js-parser": "^0.7.4",
     "node-fetch": "^3.3.0"
