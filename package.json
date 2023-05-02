@@ -10,7 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@notionhq/client": "^2.2.3",
+    "@notionhq/client": "^2.2.4",
     "@tryfabric/martian": "^1.2.4",
     "@types/cron": "^2.0.0",
     "cron": "^2.3.0",
